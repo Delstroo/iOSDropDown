@@ -7,6 +7,7 @@
 //  Copyright © 2018 JRiOSdev. All rights reserved.
 //
 import UIKit
+@available(iOS 13.0, *)
 @objc(JRDropDown)
 open class DropDown: UITextField {
     var arrow: Arrow!
@@ -16,7 +17,7 @@ open class DropDown: UITextField {
 
     // MARK: IBInspectable
 
-    @IBInspectable public var rowHeight: CGFloat = 30
+    @IBInspectable public var rowHeight: CGFloat = 40
     @IBInspectable public var rowBackgroundColor: UIColor = .white
     @IBInspectable public var itemsColor: UIColor = .darkGray
     @IBInspectable public var itemsTintColor: UIColor = .blue
@@ -34,7 +35,7 @@ open class DropDown: UITextField {
         }
     }
 
-    @IBInspectable public var listHeight: CGFloat = 150 {
+    @IBInspectable public var listHeight: CGFloat = 205 {
         didSet {
         }
     }
@@ -45,7 +46,7 @@ open class DropDown: UITextField {
         }
     }
 
-    @IBInspectable public var cornerRadius: CGFloat = 5.0 {
+    @IBInspectable public var cornerRadius: CGFloat = 7.0 {
         didSet {
             layer.cornerRadius = cornerRadius
         }
@@ -91,7 +92,7 @@ open class DropDown: UITextField {
     @IBInspectable public var arrowSize: CGFloat = 15 {
         didSet {
             let center = arrow.superview!.center
-            arrow.frame = CGRect(x: center.x - arrowSize / 2, y: center.y - arrowSize / 2, width: arrowSize, height: arrowSize)
+            arrow.frame = CGRect(x: center.x / 2, y: center.y - arrowSize / 2, width: arrowSize, height: arrowSize)
         }
     }
 
@@ -134,7 +135,7 @@ open class DropDown: UITextField {
 
     func setupUI() {
         let size = frame.height
-        let arrowView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: size, height: size))
+        let arrowView = UIView(frame: CGRect(x: 14.5, y: 0.0, width: size, height: size))
         let arrowContainerView = UIView(frame: arrowView.frame)
         if semanticContentAttribute == .forceRightToLeft {
             leftView = arrowView
@@ -219,7 +220,7 @@ open class DropDown: UITextField {
         }
         table = UITableView(frame: CGRect(x: pointToParent.x,
                                           y: pointToParent.y + frame.height,
-                                          width: frame.width,
+                                          width: 160,
                                           height: frame.height))
         shadow = UIView(frame: table.frame)
         shadow.backgroundColor = .clear
@@ -248,7 +249,7 @@ open class DropDown: UITextField {
 
                            self.table.frame = CGRect(x: self.pointToParent.x,
                                                      y: y,
-                                                     width: self.frame.width,
+                                                     width: 160,
                                                      height: self.tableheightX)
                            self.table.alpha = 1
                            self.shadow.frame = self.table.frame
@@ -272,7 +273,7 @@ open class DropDown: UITextField {
                        animations: { () -> Void in
                            self.table.frame = CGRect(x: self.pointToParent.x,
                                                      y: self.pointToParent.y + self.frame.height,
-                                                     width: self.frame.width,
+                                                     width: 160,
                                                      height: 0)
                            self.shadow.alpha = 0
                            self.shadow.frame = self.table.frame
@@ -311,7 +312,7 @@ open class DropDown: UITextField {
                        animations: { () -> Void in
                            self.table.frame = CGRect(x: self.pointToParent.x,
                                                      y: y,
-                                                     width: self.frame.width,
+                                                     width: 160,
                                                      height: self.tableheightX)
                            self.shadow.frame = self.table.frame
                            self.shadow.dropShadow()
@@ -355,6 +356,7 @@ open class DropDown: UITextField {
 
 // MARK: UITextFieldDelegate
 
+@available(iOS 13.0, *)
 extension DropDown: UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         superview?.endEditing(true)
@@ -362,7 +364,7 @@ extension DropDown: UITextFieldDelegate {
     }
 
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.text = ""
+//        textField.text = ""
         // self.selectedIndex = nil
         dataArray = optionArray
         touchAction()
@@ -388,6 +390,7 @@ extension DropDown: UITextFieldDelegate {
 
 // MARK: UITableViewDataSource
 
+@available(iOS 13.0, *)
 extension DropDown: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataArray.count
@@ -426,6 +429,7 @@ extension DropDown: UITableViewDataSource {
 
 // MARK: UITableViewDelegate
 
+@available(iOS 13.0, *)
 extension DropDown: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndex = (indexPath as NSIndexPath).row
@@ -464,6 +468,7 @@ enum Position {
     case up
 }
 
+@available(iOS 13.0, *)
 class Arrow: UIView {
     let shapeLayer = CAShapeLayer()
     var arrowColor: UIColor = .black {
@@ -520,12 +525,20 @@ class Arrow: UIView {
 
         // Mask to path
         shapeLayer.path = bezierPath.cgPath
-        //  shapeLayer.fillColor = arrowColor.cgColor
+        // shapeLayer.fillColor = arrowColor.cgColor
+        
+        let imageLayer = CALayer()
+        imageLayer.backgroundColor = UIColor.clear.cgColor
+        imageLayer.bounds = CGRect(x: 0, y: 0.5 , width: size, height: size)
+        imageLayer.position = CGPoint(x: 20.5 ,y:5.5)
+        imageLayer.contents = UIImage(named:"dropDownArrow")?.cgImage
 
         if #available(iOS 12.0, *) {
             self.layer.addSublayer(shapeLayer)
+            self.layer.cornerRadius = 10
         } else {
             layer.mask = shapeLayer
+            layer.cornerRadius = 10
         }
     }
 }
