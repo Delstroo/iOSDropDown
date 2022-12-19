@@ -23,7 +23,7 @@ open class DropDown: UITextField {
     @IBInspectable public var itemsTintColor: UIColor = .blue
     @IBInspectable public var selectedRowColor: UIColor = .systemPink
     @IBInspectable public var hideOptionsWhenSelect = true
-    @IBInspectable public var isSearchEnable: Bool = true {
+    @IBInspectable public var isSearchEnable: Bool = false {
         didSet {
             addGesture()
         }
@@ -509,18 +509,34 @@ class Arrow: UIView {
 
     override func draw(_ rect: CGRect) {
         // Get size
-        let size = layer.frame.width
+        let width = layer.frame.width
+        
+        let arrowWidth = CGFloat(12)
+        
+        let height = layer.frame.height
+        
+        let arrowHeight = CGFloat(8)
+        
+        let xOffset = (width - arrowWidth)/2
+        
+        let yOffset = (height - arrowHeight)/2
 
         // Create path
         let bezierPath = UIBezierPath()
 
         // Draw points
-        let qSize = size / 4
+        let qSize = width / 4
 
-        bezierPath.move(to: CGPoint(x: 0, y: qSize))
-        bezierPath.addLine(to: CGPoint(x: size, y: qSize))
-        bezierPath.addLine(to: CGPoint(x: size / 2, y: qSize * 3))
-        bezierPath.addLine(to: CGPoint(x: 0, y: qSize))
+        bezierPath.move(to: CGPoint(x: 0.705384 + xOffset, y: 0.999537 + yOffset))
+        bezierPath.addCurve(to: CGPoint(x: 1.09466 + xOffset, y: 0.61026 + yOffset), controlPoint1: CGPoint(x: 1.72569 + xOffset, y: 0.609921 + yOffset), controlPoint2: CGPoint(x: 2.11538 + xOffset, y: 0.998769 + yOffset))
+        bezierPath.addLine(to: CGPoint(x: 6 + xOffset, y: 4.87492 + yOffset))
+        bezierPath.addLine(to: CGPoint(x: 9.88462 + xOffset, y: 0.998768 + yOffset))
+        bezierPath.addCurve(to: CGPoint(x: 10.2743 + xOffset, y: 0.609921 + yOffset), controlPoint1: CGPoint(x: 10.9053 + xOffset, y: 0.610265 + yOffset), controlPoint2: CGPoint(x: 11.2946 + xOffset, y: 0.999537 + yOffset))
+        bezierPath.addCurve(to: CGPoint(x: 11.6842 + xOffset, y: 1.38911 + yOffset), controlPoint1: CGPoint(x: 11.6842 + xOffset, y: 2.02073 + yOffset), controlPoint2: CGPoint(x: 11.2946 + xOffset, y: 2.41031 + yOffset))
+        bezierPath.addLine(to: CGPoint(x: 6.70711 + xOffset, y: 6.99782 + yOffset))
+        bezierPath.addCurve(to: CGPoint(x: 6.31658 + xOffset, y: 7.38834 + yOffset), controlPoint1: CGPoint(x: 5.68342 + xOffset + xOffset, y: 7.38834 + yOffset), controlPoint2: CGPoint(x: 5.29289 + xOffset, y: 6.99782 + yOffset))
+        bezierPath.addLine(to: CGPoint(x: 0.705384 + xOffset, y: 2.41031 + yOffset))
+        bezierPath.addCurve(to: CGPoint(x: 0.315811 + xOffset, y: 2.02073 + yOffset), controlPoint1: CGPoint(x: 0.315811 + xOffset, y: 1.38911 + yOffset), controlPoint2: CGPoint(x: 0.705384 + xOffset, y: 0.999537 + yOffset))
         bezierPath.close()
 
         // Mask to path
@@ -529,7 +545,7 @@ class Arrow: UIView {
         
         let imageLayer = CALayer()
         imageLayer.backgroundColor = UIColor.clear.cgColor
-        imageLayer.bounds = CGRect(x: 0, y: 0.5 , width: size, height: size)
+        imageLayer.bounds = CGRect(x: 0, y: 0.5 , width: width, height: height)
         imageLayer.position = CGPoint(x: 20.5 ,y:5.5)
         imageLayer.contents = UIImage(named:"dropDownArrow")?.cgImage
 
